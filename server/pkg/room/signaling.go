@@ -37,7 +37,7 @@ func broadcast() {
 			if client.Conn != msg.Client {
 				err := client.Conn.WriteJSON(msg.Message)
 				if err != nil {
-					log.Fatalf("Failed to write to connection: %v", err)
+					log.Fatal("Failed to write to connection: ", err)
 					client.Conn.Close()
 				}
 			}
@@ -57,9 +57,8 @@ func JoinRoomHandler(c *gin.Context) {
 	}
 
 	ws, err := upgrader.Upgrade(c.Writer, c.Request, nil)
-
 	if err != nil {
-		log.Fatalf("Websocket upgrade failed: %v", err)
+		log.Printf("Websocket upgrade failed: %v", err)
 	}
 
 	Rooms.AddParticipantToRoom(roomId, false, ws)
@@ -71,7 +70,7 @@ func JoinRoomHandler(c *gin.Context) {
 
 		err := ws.ReadJSON(&msg.Message)
 		if err != nil {
-			log.Fatalf("Read err: %v", err)
+			log.Printf("Error reading message: %v", err)
 		}
 		msg.Client = ws
 		msg.RoomId = roomId
