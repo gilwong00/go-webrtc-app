@@ -25,8 +25,6 @@ var upgrader = websocket.Upgrader{
 	CheckOrigin: func(r *http.Request) bool {
 		return true
 	},
-	ReadBufferSize:  1024,
-	WriteBufferSize: 1024,
 }
 
 func broadcast() {
@@ -74,6 +72,8 @@ func JoinRoomHandler(c *gin.Context) {
 		}
 		msg.Client = ws
 		msg.RoomId = roomId
+
+		log.Println(msg.Message)
 
 		broadcastChannel <- msg
 	}
